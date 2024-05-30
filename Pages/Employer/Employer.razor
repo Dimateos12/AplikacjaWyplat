@@ -1,0 +1,57 @@
+﻿@page "/addNewEmployer"
+@using System.Linq
+
+<PageTitle>Obliczanie pensji pracownika</PageTitle>
+
+<MudSelect T="@JobPosition" Label="Pozycja" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" ValueChanged="OnJobPositionChanged">
+    <MudSelectItem Value="@JobPosition.Manager" />
+    <MudSelectItem Value="@JobPosition.Programmer" />
+    <MudSelectItem Value="@JobPosition.Analyst" />
+    <MudSelectItem Value="@JobPosition.PM" />
+    <MudSelectItem Value="@JobPosition.Tester" />
+</MudSelect>
+
+<MudTextField @bind-Value="Amount" Label="Amount" Variant="Variant.Filled" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"
+Disabled/>
+
+
+@code {
+    
+    public string? TextValue { get; set; }
+    public double? Amount { get; set; }
+
+    public enum JobPosition
+    {
+        Manager,
+        Programmer,
+        Analyst,
+        PM,
+        Tester,
+    }
+
+    private void OnJobPositionChanged(JobPosition newPosition)
+    {
+        switch (newPosition)
+        {
+            case JobPosition.Manager:
+                Amount = 100;
+                break;
+            case JobPosition.Programmer:
+                Amount = 80;
+                break;
+            case JobPosition.Analyst:
+                Amount = 70;
+                break;
+            case JobPosition.PM:
+                Amount = 90;
+                break;
+            case JobPosition.Tester:
+                Amount = 60;
+                break;
+            default:
+                Amount = 0;
+                break;
+        }
+    }
+
+}
