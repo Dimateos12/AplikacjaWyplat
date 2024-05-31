@@ -1,5 +1,7 @@
 ﻿@page "/addNewEmployer"
 @using System.Linq
+@using AplikacjaWyplat.Pages.Enums;
+@inject SalaryRule SalaryRule
 
 <PageTitle>Obliczanie pensji pracownika</PageTitle>
 
@@ -8,10 +10,11 @@
 
 <MudSelect T="@JobPosition" Label="Pozycja" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" ValueChanged="OnJobPositionChanged">
     <MudSelectItem Value="@JobPosition.Manager" />
-    <MudSelectItem Value="@JobPosition.Programista" />
-    <MudSelectItem Value="@JobPosition.Analityk" />
+    <MudSelectItem Value="@JobPosition.Programmer" />
+    <MudSelectItem Value="@JobPosition.Analyst" />
     <MudSelectItem Value="@JobPosition.PM" />
     <MudSelectItem Value="@JobPosition.Tester" />
+    <MudSelectItem Value="@JobPosition.Niestandardowy" />
 </MudSelect>
 
 <MudTextField @bind-Value="Amount" Label="Zarobki" Variant="Variant.Filled" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"
@@ -35,8 +38,13 @@ Disabled/>
     <MudNumericField @bind-Value="NumberOfOvertime" Label="Ilość nagodzin" />
 }
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Class="mt-10">Wylicz pensje</MudButton>
+<MudButton OnClick="@Oblicz" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Class="mt-10">Wylicz pensje</MudButton>
 
+
+@if (wyplata.Length != 0)
+{
+    <MudAlert>@wyplata</MudAlert>
+}
 
 
 @code {
@@ -48,16 +56,11 @@ Disabled/>
     public DateTime? DateTo { get; set; }
     public bool? Overtime { get; set; } = false;
     public int? NumberOfOvertime {get; set;}
+    public string wyplata { get; set; } = "";
 
-
-    public enum JobPosition
-    {
-        Manager,
-        Programista,
-        Analityk,
-        PM,
-        Tester,
-        Niestandardowy
+    public void Oblicz(){
+        SalaryRule salary = new SalaryRule();
+        wyplata = salary.main();
     }
 
     private void OnJobPositionChanged(JobPosition newPosition)
@@ -67,10 +70,10 @@ Disabled/>
             case JobPosition.Manager:
                 Amount = 100;
                 break;
-            case JobPosition.Programista:
+            case JobPosition.Programmer:
                 Amount = 80;
                 break;
-            case JobPosition.Analityk:
+            case JobPosition.Analyst:
                 Amount = 70;
                 break;
             case JobPosition.PM:
@@ -84,5 +87,5 @@ Disabled/>
                 break;
         }
     }
-
+    
 }

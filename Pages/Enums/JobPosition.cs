@@ -7,5 +7,6 @@
         Analyst,
         PM,
         Tester,
+        Niestandardowy
     }
 }
