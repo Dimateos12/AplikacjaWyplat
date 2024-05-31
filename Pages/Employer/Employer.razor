@@ -3,30 +3,61 @@
 
 <PageTitle>Obliczanie pensji pracownika</PageTitle>
 
+<MudText Typo="Typo.h3" Class="mb-8">Formularz rozliczania pracowników</MudText>
+
+
 <MudSelect T="@JobPosition" Label="Pozycja" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" ValueChanged="OnJobPositionChanged">
     <MudSelectItem Value="@JobPosition.Manager" />
-    <MudSelectItem Value="@JobPosition.Programmer" />
-    <MudSelectItem Value="@JobPosition.Analyst" />
+    <MudSelectItem Value="@JobPosition.Programista" />
+    <MudSelectItem Value="@JobPosition.Analityk" />
     <MudSelectItem Value="@JobPosition.PM" />
     <MudSelectItem Value="@JobPosition.Tester" />
 </MudSelect>
 
-<MudTextField @bind-Value="Amount" Label="Amount" Variant="Variant.Filled" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"
+<MudTextField @bind-Value="Amount" Label="Zarobki" Variant="Variant.Filled" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"
 Disabled/>
 
 
+<MudCheckBox @bind-Value="Delegations" Label="Delegacje ?" />
+
+@if(Delegations == true)
+{
+    <MudDatePicker @bind-Date="DateFrom" Label="Data od " Variant="Variant.Filled"  />
+
+    <MudDatePicker @bind-Date="DateFrom" Label="Data do" Variant="Variant.Filled" MinDate="DateFrom" />
+
+}
+
+<MudCheckBox @bind-Value="Overtime" Label="Nadgodziny ?" />
+
+@if(Overtime == true)
+{
+    <MudNumericField @bind-Value="NumberOfOvertime" Label="Ilość nagodzin" />
+}
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Class="mt-10">Wylicz pensje</MudButton>
+
+
+
 @code {
-    
+
     public string? TextValue { get; set; }
     public double? Amount { get; set; }
+    public bool? Delegations { get; set; } = false;
+    public DateTime? DateFrom { get; set; }
+    public DateTime? DateTo { get; set; }
+    public bool? Overtime { get; set; } = false;
+    public int? NumberOfOvertime {get; set;}
+
 
     public enum JobPosition
     {
         Manager,
-        Programmer,
-        Analyst,
+        Programista,
+        Analityk,
         PM,
         Tester,
+        Niestandardowy
     }
 
     private void OnJobPositionChanged(JobPosition newPosition)
@@ -36,10 +67,10 @@ Disabled/>
             case JobPosition.Manager:
                 Amount = 100;
                 break;
-            case JobPosition.Programmer:
+            case JobPosition.Programista:
                 Amount = 80;
                 break;
-            case JobPosition.Analyst:
+            case JobPosition.Analityk:
                 Amount = 70;
                 break;
             case JobPosition.PM:
